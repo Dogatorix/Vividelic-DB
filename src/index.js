@@ -70,6 +70,18 @@ class DogaDB {
 
     return new UserData(id, obj, this.db);
   }
+  getID(keySearch, valueSearch) {
+    // find id by key and value
+    // for example, getID('username', 'doga') will return the id of the user with username 'doga'
+    let found = null;
+    for await (const [key, value] of this.db.iterator()) {
+      if (value[keySearch] === valueSearch) {
+        found = key;
+        break;
+      }
+    };
+    return found;
+  }
 }
 
 module.exports = DogaDB;
