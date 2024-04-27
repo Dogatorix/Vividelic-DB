@@ -19,6 +19,7 @@ class UserData {
       }
     });
 
+    this.data.created = this.data.created || Date.now();
     this.data.modified = Date.now();
     await this.db.set(this.id, this.data);
     return this;
