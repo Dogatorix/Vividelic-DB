@@ -49,8 +49,9 @@ class DogaDB {
     if (!this.structure.modified) this.structure.modified = Date.now();
   }
 
-  async get(id) {
-    let data = (await this.db.get(id)) || this.createIfNotExists ? {} : null;
+  async get(id, createIfNot = false) {
+    let createIfNotExists = createIfNot || this.createIfNotExists;
+    let data = (await this.db.get(id)) || createIfNotExists ? {} : null;
     if(!data) return null;
     let structure = this.structure;
     let obj = {};
@@ -70,7 +71,7 @@ class DogaDB {
 
     return new UserData(id, obj, this.db);
   }
-  getID(keySearch, valueSearch) {
+  async getID(keySearch, valueSearch) {
     // find id by key and value
     // for example, getID('username', 'doga') will return the id of the user with username 'doga'
     let found = null;
