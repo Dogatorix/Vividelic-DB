@@ -42,7 +42,6 @@ class DogaDB {
     this.db = new Keyv(`sqlite://${options.path}`, options.keyv || {});
     this.structure = options.structure;
     this.on = this.db.on;
-    this.createIfNotExists = options.createIfNotExists || false;
 
     if (!this.structure) throw new Error("Please provide structure to DogaDB");
 
@@ -50,9 +49,8 @@ class DogaDB {
   }
 
   async get(id, createIfNot = false) {
-    let createIfNotExists = createIfNot || this.createIfNotExists;
-    let data = (await this.db.get(id)) || createIfNotExists ? {} : null;
-    if(!data) return null;
+    let data = (await this.db.get(id)) || {};
+    if (!data) return null;
     let structure = this.structure;
     let obj = {};
     structure.id = id;
@@ -71,6 +69,10 @@ class DogaDB {
 
     return new UserData(id, obj, this.db);
   }
+  async exists(id) {
+    let exists = await this.db.get(id);
+    return exists ? true : false;
+  }
   async getID(keySearch, valueSearch) {
     // find id by key and value
     // for example, getID('username', 'doga') will return the id of the user with username 'doga'
@@ -80,7 +82,7 @@ class DogaDB {
         found = key;
         break;
       }
-    };
+    }
     return found;
   }
 }
