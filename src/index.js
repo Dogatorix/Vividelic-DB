@@ -47,6 +47,7 @@ class DogaDB {
     if (!this.structure) throw new Error("Please provide structure to DogaDB");
 
     if (!this.structure.modified) this.structure.modified = Date.now();
+    if (!this.structure.created) this.structure.created = Date.now();
   }
 
   async get(id, createIfNot = false) {
