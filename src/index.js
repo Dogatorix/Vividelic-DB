@@ -42,6 +42,7 @@ class DogaDB {
     this.db = new Keyv(`sqlite://${options.path}`, options.keyv || {});
     this.structure = options.structure;
     this.on = this.db.on;
+    this.createIfNotExists = options.createIfNotExists || false;
 
     if (!this.structure) throw new Error("Please provide structure to DogaDB");
 
@@ -49,7 +50,8 @@ class DogaDB {
   }
 
   async get(id) {
-    let data = (await this.db.get(id)) || {};
+    let data = (await this.db.get(id)) || this.createIfNotExists ? {} : null;
+    if(!data) return null;
     let structure = this.structure;
     let obj = {};
     structure.id = id;
